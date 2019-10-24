@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 export const MainPage = (props) => {
-  const {filmNames} = props;
+  const {filmNames, onHeaderClick} = props;
 
   return <>
   <section className="movie-card">
@@ -35,7 +35,7 @@ export const MainPage = (props) => {
         </div>
 
         <div className="movie-card__desc">
-          <h2 className="movie-card__title">The Grand Budapest Hotel</h2>
+          <h2 className="movie-card__title" onClick={onHeaderClick}>The Grand Budapest Hotel</h2>
           <p className="movie-card__meta">
             <span className="movie-card__genre">Drama</span>
             <span className="movie-card__year">2014</span>
@@ -133,4 +133,5 @@ export const MainPage = (props) => {
 
 MainPage.propTypes = {
   filmNames: PropTypes.array.isRequired,
+  onHeaderClick: PropTypes.func,
 };

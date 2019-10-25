@@ -12,21 +12,28 @@ export class FilmsList extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    this.setState({})
+    this.setState({isCardActive: false});
   }
 
   render() {
-    const films = this.props;
+    const {films} = this.props;
+
     return films.map((film, i) => <SmallMovieCard
       key = {`${film.name}-${i}`}
       name = {film.name}
       src = {film.src}
-      onFilmCardOver = {() => this.setState({isCardActive: true})}
-      onFilmCardOut = {() => this.setState({isCardActive: false})}
+      onFilmCardOver = {() => {
+        this.setState({isCardActive: true});
+        // console.log(this.state.isCardActive);
+      }}
+      // onFilmCardOut = {() => {
+      //   console.log(this.state.isCardActive);
+      //   this.setState({isCardActive: false});
+      // }}
     />);
   }
 }
 
-FilmsList.propType = {
-  films: PropTypes.array.isRequired,
+FilmsList.propTypes = {
+  films: PropTypes.array,
 };

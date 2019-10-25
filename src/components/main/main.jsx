@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {FilmsList} from "../films-list/films-list";
 
 export const MainPage = (props) => {
-  const {filmNames, onHeaderClick} = props;
+  const {onHeaderClick, filmData} = props;
 
   return <>
   <section className="movie-card">
@@ -97,16 +98,9 @@ export const MainPage = (props) => {
     </ul>
 
     <div className="catalog__movies-list">
-      {filmNames.map((filmName, i) => {
-        return <article className="small-movie-card catalog__movies-card" key={filmName + i}>
-          <div className="small-movie-card__image">
-            <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg" alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175" />
-          </div>
-          <h3 className="small-movie-card__title">
-            <a className="small-movie-card__link" href="movie-page.html">{filmName}</a>
-          </h3>
-        </article>;
-      })}
+      {<FilmsList
+        films = {filmData}
+      />}
     </div>
 
     <div className="catalog__more">
@@ -132,6 +126,6 @@ export const MainPage = (props) => {
 };
 
 MainPage.propTypes = {
-  filmNames: PropTypes.array.isRequired,
   onHeaderClick: PropTypes.func,
+  filmData: PropTypes.array,
 };

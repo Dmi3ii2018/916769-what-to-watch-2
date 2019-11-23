@@ -1,22 +1,27 @@
 export const films = [
   {
+    id: 0,
     name: `Fantastic Beasts: The Crimes of Grindelwald`,
-    src: `fantastic-beasts-the-crimes-of-grindelwald`,
+    img: `fantastic-beasts-the-crimes-of-grindelwald`,
   },
   {
+    id: 1,
     name: `Bohemian Rhapsody`,
-    src: `bohemian-rhapsody`,
+    img: `bohemian-rhapsody`,
   },
   {
+    id: 2,
     name: `Macbeth`,
-    src: `macbeth`,
+    img: `macbeth`,
   },
   {
+    id: 3,
     name: `Aviator`,
-    src: `aviator`,
+    img: `aviator`,
   },
   {
+    id: 4,
     name: `We need to talk about Kevin`,
-    src: `we-need-to-talk-about-kevin`,
+    img: `we-need-to-talk-about-kevin`,
   },
 ];

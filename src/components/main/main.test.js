@@ -1,16 +1,13 @@
 import React from "react";
-import renderer from "react-test-renderer";
 import {MainPage} from "../main/main";
 import {films} from "../../moks/film";
+import {shallow} from "enzyme";
 
 it(`MainPage correctly renders after relaunch`, () => {
-  const tree = renderer
-    .create(<MainPage
-      // filmNames = {data.filmNames}
-      onHeaderClick = {() => ``}
-      filmData = {films}
-    />)
-    .toJSON();
+  const tree = shallow(<MainPage
+    onHeaderClick = {jest.fn()}
+    filmData = {films}
+  />);
 
   expect(tree).toMatchSnapshot();
 });

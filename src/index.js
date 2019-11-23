@@ -7,7 +7,6 @@ const init = () => {
 
   ReactDOM.render(
       <MainPage
-        // filmNames = {data.filmNames}
         onHeaderClick = {() => ``}
         filmData = {films}
       />,

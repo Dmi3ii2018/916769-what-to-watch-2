@@ -98,9 +98,9 @@ export const MainPage = (props) => {
     </ul>
 
     <div className="catalog__movies-list">
-      {<FilmsList
+      <FilmsList
         films = {filmData}
-      />}
+      />
     </div>
 
     <div className="catalog__more">

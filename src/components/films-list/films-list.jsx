@@ -7,29 +7,31 @@ export class FilmsList extends React.PureComponent {
     super(props);
 
     this.state = {
-      isCardActive: false,
+      activeCardId: -1,
     };
+
+    this.cardOverHandler = this.cardOverHandler.bind(this);
+    this.cardOutHandler = this.cardOutHandler.bind(this);
   }
 
-  componentWillUnmount() {
-    this.setState({isCardActive: false});
+  cardOverHandler(id) {
+    this.setState({activeCardId: id});
+  }
+
+  cardOutHandler() {
+    this.setState({activeCardId: -1});
   }
 
   render() {
     const {films} = this.props;
 
-    return films.map((film, i) => <SmallMovieCard
-      key = {`${film.name}-${i}`}
+    return films.map((film) => <SmallMovieCard
+      key = {`${film.id}`}
       name = {film.name}
-      src = {film.src}
-      onFilmCardOver = {() => {
-        this.setState({isCardActive: true});
-        // console.log(this.state.isCardActive);
-      }}
-      // onFilmCardOut = {() => {
-      //   console.log(this.state.isCardActive);
-      //   this.setState({isCardActive: false});
-      // }}
+      img = {film.img}
+      id = {film.id}
+      onFilmCardOver = {this.cardOverHandler}
+      onFilmCardOut = {this.cardOutHandler}
     />);
   }
 }

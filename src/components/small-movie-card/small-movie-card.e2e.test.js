@@ -1,20 +1,23 @@
 import React from "react";
-import Enzyme, {shallow} from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import {shallow} from "enzyme";
 import {SmallMovieCard} from "./small-movie-card";
-
-Enzyme.configure({adapter: new Adapter()});
+// import {films} from "../../moks/film";
 
 it(`small movie card is active on hover`, () => {
   const onMovieCardHover = jest.fn();
+  const onMovieCardOut = jest.fn();
+  const id = 1;
   const app = shallow(<SmallMovieCard
-    name = {``}
-    src = {``}
+    name = {`Avrora`}
+    img = {`path`}
+    id = {id}
     onFilmCardOver = {onMovieCardHover}
+    onFilmCardOut = {onMovieCardOut}
   />);
 
   const card = app.find(`article`);
   card.simulate(`mouseover`);
 
   expect(onMovieCardHover).toHaveBeenCalledTimes(1);
+  expect(onMovieCardHover.mock.calls[0][0]).toEqual(id);
 });

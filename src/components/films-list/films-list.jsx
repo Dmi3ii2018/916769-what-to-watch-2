@@ -30,6 +30,7 @@ export class FilmsList extends React.PureComponent {
       name = {film.name}
       img = {film.img}
       id = {film.id}
+      preview={film.preview}
       onFilmCardOver = {this.cardOverHandler}
       onFilmCardOut = {this.cardOutHandler}
     />);

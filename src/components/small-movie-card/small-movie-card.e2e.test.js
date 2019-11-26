@@ -11,6 +11,7 @@ it(`small movie card is active on hover`, () => {
     name = {`Avrora`}
     img = {`path`}
     id = {id}
+    preview = {`https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4`}
     onFilmCardOver = {onMovieCardHover}
     onFilmCardOut = {onMovieCardOut}
   />);

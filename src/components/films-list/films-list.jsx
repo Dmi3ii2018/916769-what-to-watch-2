@@ -1,8 +1,23 @@
 import React from "react";
 import {SmallMovieCard} from "../small-movie-card/small-movie-card";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
 
-export class FilmsList extends React.PureComponent {
+const INITIAL_GENRE = `All genres`;
+
+const filterFilmsList = (state) => {
+  if (state.genre !== INITIAL_GENRE) {
+    const filteredFilmsList = state.filmsList.filter((film) => film.genre === state.genre);
+    return filteredFilmsList;
+  }
+  return state.filmsList;
+};
+
+const mapStateToProps = (state) => ({
+  films: filterFilmsList(state),
+});
+
+class Films extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -37,6 +52,8 @@ export class FilmsList extends React.PureComponent {
   }
 }
 
-FilmsList.propTypes = {
+export const FilmsList = connect(mapStateToProps)(Films);
+
+Films.propTypes = {
   films: PropTypes.array,
 };

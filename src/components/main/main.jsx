@@ -1,9 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {FilmsList} from "../films-list/films-list";
+import {GenresList} from "../../components/geners-list/genres-list";
+import {connect} from "react-redux";
 
-export const MainPage = (props) => {
-  const {onHeaderClick, filmData} = props;
+const mapStateToProps = (state) => ({
+  filmData: state.filmsList
+});
+
+export const Main = (props) => {
+  const {filmData} = props;
 
   return <>
   <section className="movie-card">
@@ -36,7 +42,7 @@ export const MainPage = (props) => {
         </div>
 
         <div className="movie-card__desc">
-          <h2 className="movie-card__title" onClick={onHeaderClick}>The Grand Budapest Hotel</h2>
+          <h2 className="movie-card__title">The Grand Budapest Hotel</h2>
           <p className="movie-card__meta">
             <span className="movie-card__genre">Drama</span>
             <span className="movie-card__year">2014</span>
@@ -64,38 +70,7 @@ export const MainPage = (props) => {
   <section className="catalog">
     <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-    <ul className="catalog__genres-list">
-      <li className="catalog__genres-item catalog__genres-item--active">
-        <a href="#" className="catalog__genres-link">All genres</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Comedies</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Crime</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Documentary</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Dramas</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Horror</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Kids & Family</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Romance</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Sci-Fi</a>
-      </li>
-      <li className="catalog__genres-item">
-        <a href="#" className="catalog__genres-link">Thrillers</a>
-      </li>
-    </ul>
+    <GenresList />
 
     <div className="catalog__movies-list">
       <FilmsList
@@ -125,7 +100,9 @@ export const MainPage = (props) => {
 </>;
 };
 
-MainPage.propTypes = {
+export const MainPage = connect(mapStateToProps)(Main);
+
+Main.propTypes = {
   onHeaderClick: PropTypes.func,
   filmData: PropTypes.array,
 };

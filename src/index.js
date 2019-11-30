@@ -1,15 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import {Provider} from "react-redux";
+import {createStore} from "redux";
+import {filterReducer} from "./reducer/reducer";
 import {MainPage} from "./components/main/main";
-import {films} from "./moks/film";
+// import {films} from "./moks/film";
 
+const store = createStore(filterReducer);
+console.log(store.getState());
 const init = () => {
 
   ReactDOM.render(
-      <MainPage
-        onHeaderClick = {() => ``}
-        filmData = {films}
-      />,
+      <Provider store={store}>
+        <MainPage/>
+      </Provider>,
       document.querySelector(`#root`)
   );
 };

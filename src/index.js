@@ -7,12 +7,11 @@ import {MainPage} from "./components/main/main";
 // import {films} from "./moks/film";
 
 const store = createStore(filterReducer);
-console.log(store.getState());
 const init = () => {
 
   ReactDOM.render(
       <Provider store={store}>
-        <MainPage/>
+        <MainPage onHeaderClic={() => {}}/>
       </Provider>,
       document.querySelector(`#root`)
   );

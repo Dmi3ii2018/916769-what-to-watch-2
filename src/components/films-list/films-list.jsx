@@ -17,7 +17,7 @@ const mapStateToProps = (state) => ({
   films: filterFilmsList(state),
 });
 
-class Films extends React.PureComponent {
+export class Films extends React.PureComponent {
   constructor(props) {
     super(props);
 

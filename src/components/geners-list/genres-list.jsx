@@ -9,8 +9,6 @@ const crateFilterList = (state) => {
   const genres = new Set();
   genres.add(INITIAL_GENRE);
   state.filmsList.forEach((it) => genres.add(it.genre));
-  console.log(genres);
-  console.log(state);
 
   return Array.from(genres);
 };
@@ -27,7 +25,7 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-class Genres extends React.PureComponent {
+export class Genres extends React.PureComponent {
   constructor(props) {
     super(props);
   }

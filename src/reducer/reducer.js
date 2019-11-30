@@ -13,16 +13,6 @@ export const filterReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         genre: action.genre,
       });
-    // case `FILTER_FILMS`:
-    //   if (action.isFiltered) {
-    //     const filteredFilmsList = state.initialFilmsList.filter((film) => film.genre === state.genre);
-    //     return Object.assign({}, state, {
-    //       filmsList: filteredFilmsList
-    //     });
-    //   }
-    //   return Object.assign({}, state, {
-    //     filmsList: films
-    //   });
     default:
       return state;
   }

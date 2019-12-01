@@ -1,10 +1,10 @@
 import React from "react";
 import {shallow} from "enzyme";
-import {FilmsList} from "./films-list";
+import {Films} from "./films-list";
 import {films} from "../../moks/film";
 
 it(`correct render of films list`, () => {
-  const tree = shallow(<FilmsList
+  const tree = shallow(<Films
     films = {films}
   />
   );

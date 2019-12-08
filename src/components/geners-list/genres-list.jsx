@@ -13,18 +13,6 @@ const crateFilterList = (state) => {
   return Array.from(genres);
 };
 
-const mapStateToProps = (state) => ({
-  filterName: state.genre,
-  filterNamesList: crateFilterList(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onGenreClick: (text) => {
-    dispatch(setFilter(text));
-    dispatch(filterFilms(true));
-  }
-});
-
 export class Genres extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -44,8 +32,6 @@ export class Genres extends React.PureComponent {
   }
 }
 
-export const GenresList = connect(mapStateToProps, mapDispatchToProps)(Genres);
-
 Genres.propTypes = {
   filterName: PropTypes.string,
   filterNamesList: PropTypes.array,
@@ -60,3 +46,17 @@ Genres.propTypes = {
   ),
   onGenreClick: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  filterName: state.genre,
+  filterNamesList: crateFilterList(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onGenreClick: (text) => {
+    dispatch(setFilter(text));
+    dispatch(filterFilms(true));
+  }
+});
+
+export const GenresList = connect(mapStateToProps, mapDispatchToProps)(Genres);

@@ -14,27 +14,9 @@ const filterFilmsList = (state) => {
 };
 
 export class Films extends React.PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      activeCardId: -1,
-    };
-
-    this.cardOverHandler = this.cardOverHandler.bind(this);
-    this.cardOutHandler = this.cardOutHandler.bind(this);
-  }
-
-  cardOverHandler(id) {
-    this.setState({activeCardId: id});
-  }
-
-  cardOutHandler() {
-    this.setState({activeCardId: -1});
-  }
 
   render() {
-    const {films} = this.props;
+    const {films, onFilmCardOver, onFilmCardOut} = this.props;
 
     return films.map((film) => <SmallMovieCard
       key = {`${film.id}`}
@@ -42,14 +24,16 @@ export class Films extends React.PureComponent {
       img = {film.img}
       id = {film.id}
       preview={film.preview}
-      onFilmCardOver = {this.cardOverHandler}
-      onFilmCardOut = {this.cardOutHandler}
+      onFilmCardOver = {onFilmCardOver}
+      onFilmCardOut = {onFilmCardOut}
     />);
   }
 }
 
 Films.propTypes = {
   films: PropTypes.array,
+  onFilmCardOver: PropTypes.func,
+  onFilmCardOut: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

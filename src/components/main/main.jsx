@@ -3,10 +3,9 @@ import PropTypes from "prop-types";
 import {FilmsList} from "../films-list/films-list";
 import {GenresList} from "../../components/geners-list/genres-list";
 import {connect} from "react-redux";
+import {withActiveItem} from "../../HoC/with-active-item";
 
-const mapStateToProps = (state) => ({
-  filmData: state.filmsList
-});
+const FilmsListWrapped = withActiveItem(FilmsList);
 
 export class Main extends React.PureComponent {
   constructor(props) {
@@ -14,7 +13,7 @@ export class Main extends React.PureComponent {
   }
 
   render() {
-    const {filmData, onHeaderClick} = this.props;
+    const {onHeaderClick} = this.props;
 
     return <>
     <section className="movie-card">
@@ -77,9 +76,7 @@ export class Main extends React.PureComponent {
       <GenresList />
 
       <div className="catalog__movies-list">
-        <FilmsList
-          films = {filmData}
-        />
+        <FilmsListWrapped />
       </div>
 
       <div className="catalog__more">
@@ -105,9 +102,14 @@ export class Main extends React.PureComponent {
   }
 }
 
+const mapStateToProps = (state) => ({
+  filmData: state.filmsList
+});
+
 export const MainPage = connect(mapStateToProps)(Main);
 
 Main.propTypes = {
   onHeaderClick: PropTypes.func,
   filmData: PropTypes.array,
 };
+

@@ -6,12 +6,27 @@ export const withActiveItem = (Component) => {
       super(props);
 
       this.state = {
-        activeItem: -1,
+        activeCardId: -1,
       };
+
+      this.cardOverHandler = this.cardOverHandler.bind(this);
+      this.cardOutHandler = this.cardOutHandler.bind(this);
+    }
+
+    cardOverHandler(id) {
+      this.setState({activeCardId: id});
+    }
+
+    cardOutHandler() {
+      this.setState({activeCardId: -1});
     }
 
     render() {
-      return <Component />;
+      return <Component
+        {...this.props}
+        onFilmCardOver = {this.cardOverHandler}
+        onFilmCardOut = {this.cardOutHandler}
+      />;
     }
   }
 

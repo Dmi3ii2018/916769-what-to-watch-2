@@ -6,7 +6,10 @@ import {filterReducer} from "./reducer/reducer";
 import {MainPage} from "./components/main/main";
 // import {films} from "./moks/film";
 
-const store = createStore(filterReducer);
+const store = createStore(filterReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f
+);
+
 const init = () => {
 
   ReactDOM.render(

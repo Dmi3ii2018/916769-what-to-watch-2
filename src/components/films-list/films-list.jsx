@@ -13,10 +13,6 @@ const filterFilmsList = (state) => {
   return state.filmsList;
 };
 
-const mapStateToProps = (state) => ({
-  films: filterFilmsList(state),
-});
-
 export class Films extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -52,8 +48,12 @@ export class Films extends React.PureComponent {
   }
 }
 
-export const FilmsList = connect(mapStateToProps)(Films);
-
 Films.propTypes = {
   films: PropTypes.array,
 };
+
+const mapStateToProps = (state) => ({
+  films: filterFilmsList(state),
+});
+
+export const FilmsList = connect(mapStateToProps)(Films);

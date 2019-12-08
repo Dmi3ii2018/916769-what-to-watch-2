@@ -4,6 +4,9 @@ const INITIAL_GENRE = `All genres`;
 
 const initialState = {
   genre: INITIAL_GENRE,
+  // filter: {
+  //   genre: INITIAL_GENRE,
+  // }
   filmsList: films,
 };
 

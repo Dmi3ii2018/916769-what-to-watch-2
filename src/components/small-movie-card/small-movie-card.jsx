@@ -54,3 +54,4 @@ SmallMovieCard.propTypes = {
   onFilmCardOver: PropTypes.func,
   onFilmCardOut: PropTypes.func,
 };
+

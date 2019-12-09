@@ -4,10 +4,6 @@ import {FilmsList} from "../films-list/films-list";
 import {GenresList} from "../../components/geners-list/genres-list";
 import {connect} from "react-redux";
 
-const mapStateToProps = (state) => ({
-  filmData: state.filmsList
-});
-
 export class Main extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -104,6 +100,10 @@ export class Main extends React.PureComponent {
   </>;
   }
 }
+
+const mapStateToProps = (state) => ({
+  filmData: state.filmsList
+});
 
 export const MainPage = connect(mapStateToProps)(Main);
 

@@ -19,12 +19,11 @@ export class VideoPreview extends React.PureComponent {
   // }
 
   render() {
-    const {poster, previewSrc} = this.props;
-    return <video ref={this._videoRef} autoPlay muted src={`${previewSrc}`} className="player__video" poster={`img/${poster}.jpg`}>Your browser does not support the video tag.</video>;
+    const {previewSrc} = this.props;
+    return <video ref={this._videoRef} autoPlay muted src={`${previewSrc}`} className="player__video">Your browser does not support the video tag.</video>;
   }
 }
 
 VideoPreview.propTypes = {
-  poster: PropTypes.string,
   previewSrc: PropTypes.string.isRequired,
 };

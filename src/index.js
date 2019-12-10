@@ -20,13 +20,15 @@ const init = () => {
       )
   );
 
-  store.dispatch(Operation.loadQuestions());
+  store.dispatch(Operation.loadFilms())
+    .then(() => {
+      ReactDOM.render(
+          <Provider store={store}>
+            <MainPage onHeaderClick={() => {}}/>
+          </Provider>,
+          document.querySelector(`#root`)
+      );
+    });
 
-  ReactDOM.render(
-      <Provider store={store}>
-        <MainPage onHeaderClick={() => {}}/>
-      </Provider>,
-      document.querySelector(`#root`)
-  );
 };
 init();

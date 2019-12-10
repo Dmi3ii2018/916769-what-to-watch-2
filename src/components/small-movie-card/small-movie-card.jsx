@@ -23,7 +23,7 @@ export class SmallMovieCard extends React.PureComponent {
   }
 
   render() {
-    const {name, img, id, preview} = this.props;
+    const {name, img, id, poster, preview} = this.props;
     const {isVideoPreviewPlaying} = this.state;
 
     return <article className="small-movie-card catalog__movies-card"
@@ -31,11 +31,10 @@ export class SmallMovieCard extends React.PureComponent {
       onMouseOut={this._filmCardOutHandler}>
       {isVideoPreviewPlaying
         ? <VideoPreview
-          poster={img}
           previewSrc={preview} />
         : <>
           <div className="small-movie-card__image">
-            <img src={`img/${img}.jpg`} alt={name} width="280" height="175" />
+            <img src={img} alt={name} width="280" height="175" />
           </div>
           <h3 className="small-movie-card__title">
             <a className="small-movie-card__link" href="movie-page.html">{name}</a>
@@ -50,6 +49,7 @@ SmallMovieCard.propTypes = {
   name: PropTypes.string.isRequired,
   img: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  poster: PropTypes.string,
   preview: PropTypes.string.isRequired,
   onFilmCardOver: PropTypes.func,
   onFilmCardOut: PropTypes.func,

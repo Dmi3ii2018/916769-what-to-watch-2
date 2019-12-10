@@ -2,16 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {setFilter, filterFilms} from "../../actions/actions";
 import {connect} from "react-redux";
-
-const INITIAL_GENRE = `All genres`;
-
-const crateFilterList = (state) => {
-  const genres = new Set();
-  genres.add(INITIAL_GENRE);
-  state.filmsList.forEach((it) => genres.add(it.genre));
-
-  return Array.from(genres);
-};
+import {createFilterList} from "../../selectors/genre-selector";
 
 export class Genres extends React.PureComponent {
   constructor(props) {
@@ -49,7 +40,7 @@ Genres.propTypes = {
 
 const mapStateToProps = (state) => ({
   filterName: state.genre,
-  filterNamesList: crateFilterList(state),
+  filterNamesList: createFilterList(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

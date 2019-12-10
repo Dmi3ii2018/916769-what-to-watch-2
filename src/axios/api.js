@@ -21,4 +21,3 @@ export const createAPI = (dispatch) => {
   return api;
 
 };
-

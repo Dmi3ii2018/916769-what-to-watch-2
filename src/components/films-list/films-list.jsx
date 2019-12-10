@@ -2,16 +2,16 @@ import React from "react";
 import {SmallMovieCard} from "../small-movie-card/small-movie-card";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
+import {getFilmsListByGenre} from "../../selectors/genre-selector";
+// import {INITIAL_GENRE} from "../../reducer/reducer";
 
-const INITIAL_GENRE = `All genres`;
-
-const filterFilmsList = (state) => {
-  if (state.genre !== INITIAL_GENRE) {
-    const filteredFilmsList = state.filmsList.filter((film) => film.genre === state.genre);
-    return filteredFilmsList;
-  }
-  return state.filmsList;
-};
+// const filterFilmsList = (state) => {
+//   if (state.genre !== INITIAL_GENRE) {
+//     const filteredFilmsList = state.filmsList.filter((film) => film.genre === state.genre);
+//     return filteredFilmsList;
+//   }
+//   return state.filmsList;
+// };
 
 export class Films extends React.PureComponent {
   constructor(props) {
@@ -37,11 +37,12 @@ export class Films extends React.PureComponent {
     const {films} = this.props;
 
     return films.map((film) => <SmallMovieCard
-      key = {`${film.id}`}
+      key = {film.id}
       name = {film.name}
-      img = {film.img}
+      img = {film.preview_image}
+      poster = {film.poster_image}
       id = {film.id}
-      preview={film.preview}
+      preview={film.preview_video_link}
       onFilmCardOver = {this.cardOverHandler}
       onFilmCardOut = {this.cardOutHandler}
     />);
@@ -53,7 +54,7 @@ Films.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  films: filterFilmsList(state),
+  films: getFilmsListByGenre(state),
 });
 
 export const FilmsList = connect(mapStateToProps)(Films);

@@ -1,20 +1,19 @@
-import {films} from "../moks/film";
+// import {films} from "../moks/film";
 
-const INITIAL_GENRE = `All genres`;
-
-const initialState = {
-  genre: INITIAL_GENRE,
-  // filter: {
-  //   genre: INITIAL_GENRE,
-  // }
-  filmsList: films,
-};
+export const INITIAL_GENRE = `All genres`;
 
 const ActionType = {
   REQUIRED_AUTHORIZATION: `REQUIRED_AUTHORIZATION`,
   LOAD_FILMS: `LOAD_FILMS`,
 };
 
+const initialState = {
+  genre: INITIAL_GENRE,
+  // filter: {
+  //   genre: INITIAL_GENRE,
+  // }
+  filmsList: [],
+};
 
 export const ActionCreator = {
   requireAuthorization: (status) => {
@@ -24,19 +23,20 @@ export const ActionCreator = {
     };
   },
 
-  loadFilms: (film) => {
+  loadFilms: (films) => {
     return {
       type: ActionType.LOAD_FILMS,
-      payload: film,
+      payload: films,
     };
   },
 };
 
 export const Operation = {
-  loadQuestions: () => (dispatch, _getState, api) => {
+  loadFilms: () => (dispatch, _getState, api) => {
     return api.get(`/films`)
       .then((response) => {
         dispatch(ActionCreator.loadFilms(response.data));
+        console.log(response);
       });
   },
 };
@@ -50,7 +50,7 @@ export const filterReducer = (state = initialState, action) => {
 
     case `LOAD_FILMS`:
       return Object.assign({}, state, {
-        filmsList: action.films
+        filmsList: action.payload
       });
 
     default:

@@ -23,7 +23,7 @@ export class SmallMovieCard extends React.PureComponent {
   }
 
   render() {
-    const {name, img, id, poster, preview} = this.props;
+    const {name, img, id, preview} = this.props;
     const {isVideoPreviewPlaying} = this.state;
 
     return <article className="small-movie-card catalog__movies-card"

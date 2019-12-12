@@ -46,8 +46,7 @@ const withSignIn = (Component) => {
 
 const mapDispatchToProps = (dispatch) => ({
   handleAuthorization: (data) => {
-    dispatch(Operation.getAuthorization(data))
-    .then(() => console.log(store.getState()));
+    dispatch(Operation.getAuthorization(data));
   }
 });
 

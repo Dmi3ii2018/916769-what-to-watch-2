@@ -30,7 +30,7 @@ export class Main extends React.PureComponent {
 
         <div className="user-block">
           <div className="user-block__avatar">
-            <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+            <img src={`https://htmlacademy-react-2.appspot.com${this.props.avatarSrc}`} alt="User avatar" width="63" height="63" />
           </div>
         </div>
       </header>
@@ -102,7 +102,8 @@ export class Main extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-  filmData: state.filmsList
+  filmData: state.filmsList,
+  avatarSrc: state.authorizationReducer.avatar_url,
 });
 
 export const MainPage = connect(mapStateToProps)(Main);
@@ -110,4 +111,5 @@ export const MainPage = connect(mapStateToProps)(Main);
 Main.propTypes = {
   onHeaderClick: PropTypes.func,
   filmData: PropTypes.array,
+  avatarSrc: PropTypes.string
 };

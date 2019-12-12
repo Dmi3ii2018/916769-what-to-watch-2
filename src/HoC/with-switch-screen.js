@@ -5,7 +5,7 @@ import {compose} from "recompose";
 
 import {SignIn} from "../components/sign-in/sign-in";
 import {MainPage} from "../components/main/main";
-import {withSignIn} from "../HoC/with-sign-in";
+import withSignIn from "../HoC/with-sign-in";
 
 const SignInWrapped = withSignIn(SignIn);
 

@@ -59,6 +59,7 @@ export const Operation = {
       })
       .then(() => {
         dispatch(ActionCreator.requireAuthorization(false));
+        console.log(_getState());
       });
   }
 };

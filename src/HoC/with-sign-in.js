@@ -3,6 +3,7 @@ import {Operation} from "../reducer/root-reducer";
 import {compose} from "recompose";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import {Redirect} from "react-router-dom";
 
 const withSignIn = (Component) => {
   class WithSignIn extends React.PureComponent {
@@ -13,6 +14,7 @@ const withSignIn = (Component) => {
       this.state = {
         email: ``,
         password: ``,
+        // redirect: false,
       };
 
       this._submitFormHandler = this._submitFormHandler.bind(this);
@@ -30,6 +32,12 @@ const withSignIn = (Component) => {
     }
 
     render() {
+      // const {redirect} = this.state;
+
+      if (!this.props.isAuthorizationRequired) {
+        return <Redirect to="/" />;
+      }
+
       return <Component
         submitHandler={this._submitFormHandler}
         inputHandler={this._inputChangeHandler}
@@ -39,9 +47,16 @@ const withSignIn = (Component) => {
 
   WithSignIn.propTypes = {
     handleAuthorization: PropTypes.func,
+    isAuthorizationRequired: PropTypes.bool,
   };
 
   return WithSignIn;
+};
+
+const mapStateToProps = (state) => {
+  return {
+    isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -52,6 +67,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 
 export default compose(
-    connect(null, mapDispatchToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     withSignIn
 );

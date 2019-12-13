@@ -7,9 +7,9 @@ import thunk from "redux-thunk";
 import {compose} from "recompose";
 import {createAPI} from './axios/api';
 import {App} from "./components/app/app";
-import {BrowserRouter} from "browser-router-dom";
+import {BrowserRouter} from "react-router-dom";
 
-import withScreenSwitch from "./HoC/with-switch-screen";
+import {withScreenSwitch} from "./HoC/with-switch-screen";
 
 const AppWrapped = withScreenSwitch(App);
 

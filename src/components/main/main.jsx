@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {Link} from "react-router-dom";
+
 import {FilmsList} from "../films-list/films-list";
 import {GenresList} from "../../components/geners-list/genres-list";
-import {connect} from "react-redux";
 
 export class Main extends React.PureComponent {
   constructor(props) {
@@ -28,11 +30,17 @@ export class Main extends React.PureComponent {
           </a>
         </div>
 
-        <div className="user-block">
-          <div className="user-block__avatar">
-            <img src={`https://htmlacademy-react-2.appspot.com${this.props.avatarSrc}`} alt="User avatar" width="63" height="63" />
+        {this.props.isAuthorizationRequired
+          ? <div className="user-block">
+            <Link to="/login" className="user-block__link">Sign in</Link>
           </div>
-        </div>
+          : <div className="user-block">
+            <div className="user-block__avatar">
+              <img src={`https://htmlacademy-react-2.appspot.com${this.props.avatarSrc}`} alt="User avatar" width="63" height="63" />
+            </div>
+          </div>
+        }
+
       </header>
 
       <div className="movie-card__wrap">
@@ -104,6 +112,7 @@ export class Main extends React.PureComponent {
 const mapStateToProps = (state) => ({
   filmData: state.filmsList,
   avatarSrc: state.authorizationReducer.avatar_url,
+  isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
 });
 
 export const MainPage = connect(mapStateToProps)(Main);
@@ -111,5 +120,6 @@ export const MainPage = connect(mapStateToProps)(Main);
 Main.propTypes = {
   onHeaderClick: PropTypes.func,
   filmData: PropTypes.array,
-  avatarSrc: PropTypes.string
+  avatarSrc: PropTypes.string,
+  isAuthorizationRequired: PropTypes.bool,
 };

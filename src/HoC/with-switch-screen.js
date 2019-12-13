@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import {compose} from "recompose";
+// import {connect} from "react-redux";
+// import {compose} from "recompose";
+import {Switch, Route} from "react-router-dom";
 
 import {SignIn} from "../components/sign-in/sign-in";
 import {MainPage} from "../components/main/main";
@@ -9,7 +10,7 @@ import withSignIn from "../HoC/with-sign-in";
 
 const SignInWrapped = withSignIn(SignIn);
 
-const withScreenSwitch = (Component) => {
+export const withScreenSwitch = (Component) => {
   class WithScreenSwitch extends React.PureComponent {
     constructor(props) {
       super(props);
@@ -17,17 +18,19 @@ const withScreenSwitch = (Component) => {
     }
 
     render() {
-      return <Component
-        {...this.props}
-        renderScreen={this._getScreen}
-        isAuthorizationRequired={this.props.isAuthorizationRequired}
-      />;
+      return <Switch>
+        <Route path="/" exact render={() => <Component
+          {...this.props}
+          renderScreen={this._getScreen}
+        />} />
+        <Route path="/login" exact component={SignInWrapped} />
+      </Switch>;
     }
 
     _getScreen() {
-      if (this.props.isAuthorizationRequired) {
-        return <SignInWrapped />;
-      }
+      // if (this.props.isAuthorizationRequired) {
+      //   return <SignInWrapped />;
+      // }
       return <MainPage />;
     }
   }
@@ -41,13 +44,13 @@ const withScreenSwitch = (Component) => {
 
 // export {withScreenSwitch};
 
-const mapStateToProps = (state) => {
-  return {
-    isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
+//   };
+// };
 
-export default compose(
-    connect(mapStateToProps),
-    withScreenSwitch
-);
+// export default compose(
+//     connect(mapStateToProps),
+//     withScreenSwitch
+// );

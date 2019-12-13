@@ -7,6 +7,7 @@ import thunk from "redux-thunk";
 import {compose} from "recompose";
 import {createAPI} from './axios/api';
 import {App} from "./components/app/app";
+import {BrowserRouter} from "browser-router-dom";
 
 import withScreenSwitch from "./HoC/with-switch-screen";
 
@@ -28,7 +29,9 @@ const init = () => {
     .then(() => {
       ReactDOM.render(
           <Provider store={store}>
-            <AppWrapped />
+            <BrowserRouter>
+              <AppWrapped />
+            </BrowserRouter>
           </Provider>,
           document.querySelector(`#root`)
       );

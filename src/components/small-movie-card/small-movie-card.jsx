@@ -1,12 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {VideoPreview} from "../video-preview/video-preview";
+import {Redirect} from "react-router-dom";
 
 export class SmallMovieCard extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {isVideoPreviewPlaying: false};
+    this.state = {
+      isVideoPreviewPlaying: false,
+      isCardClicked: false,
+    };
 
     this._filmCardOverHandler = this._filmCardOverHandler.bind(this);
     this._filmCardOutHandler = this._filmCardOutHandler.bind(this);
@@ -24,9 +28,13 @@ export class SmallMovieCard extends React.PureComponent {
 
   render() {
     const {name, img, id, preview} = this.props;
-    const {isVideoPreviewPlaying} = this.state;
+    const {isVideoPreviewPlaying, isCardClicked} = this.state;
 
-    return <article className="small-movie-card catalog__movies-card"
+    if (isCardClicked) {
+      return <Redirect to={{pathname: `/films`, state: {id}}} />;
+    }
+
+    return <article onClick={() => this.setState({isCardClicked: true})} className="small-movie-card catalog__movies-card"
       onMouseOver={() => this._filmCardOverHandler(id)}
       onMouseOut={this._filmCardOutHandler}>
       {isVideoPreviewPlaying

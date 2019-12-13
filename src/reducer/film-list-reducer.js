@@ -12,6 +12,11 @@ export const filterReducer = (state = initialState, action) => {
         filmsList: action.payload
       });
 
+    case `LOAD_FAVORITE`:
+      return Object.assign({}, state, {
+        favoriteFilms: action.payload
+      });
+
     default:
       return state;
   }

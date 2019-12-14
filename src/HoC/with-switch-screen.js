@@ -9,7 +9,7 @@ import {MainPage} from "../components/main/main";
 import withSignIn from "../HoC/with-sign-in";
 import {FilmAddReview} from "../components/film-add-review/film-add-review";
 import {MyFilmList} from "../components/my-film-list/my-film-list";
-import {withFilmOverview} from "../HoC/switch-overview-screen";
+import withFilmOverview from "../HoC/switch-overview-screen";
 import {FilmOverview} from "../components/film-overview/film-overview";
 
 const SignInWrapped = withSignIn(SignIn);
@@ -31,11 +31,10 @@ export const withScreenSwitch = (Component) => {
         <Route path="/login" exact component={SignInWrapped} />
         <Route path="/films/:id/review" component={FilmAddReview} />
         <Route path="/mylist" component={MyFilmList} />
-        <Route path="/films" render={() => <FilmOverviewWrapped
+        <Route path="/films/:id" render={(props) => <FilmOverviewWrapped
           {...this.props}
-          // id={this.props.location.state.id}
+          id = {props.location.state.id}
         />} />
-        <Redirect to="/" />
       </Switch>;
     }
 

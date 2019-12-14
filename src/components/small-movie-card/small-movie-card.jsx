@@ -16,13 +16,13 @@ export class SmallMovieCard extends React.PureComponent {
     this._filmCardOutHandler = this._filmCardOutHandler.bind(this);
   }
 
-  _filmCardOverHandler(id) {
-    this.props.onFilmCardOver(id);
+  _filmCardOverHandler() {
+    // this.props.onFilmCardOver(id);
     this.setState({isVideoPreviewPlaying: true});
   }
 
   _filmCardOutHandler() {
-    this.props.onFilmCardOut();
+    // this.props.onFilmCardOut();
     this.setState({isVideoPreviewPlaying: false});
   }
 
@@ -31,7 +31,7 @@ export class SmallMovieCard extends React.PureComponent {
     const {isVideoPreviewPlaying, isCardClicked} = this.state;
 
     if (isCardClicked) {
-      return <Redirect to={{pathname: `/films`, state: {id}}} />;
+      return <Redirect to={{pathname: `/films/${id}`, state: {id}}} />;
     }
 
     return <article onClick={() => this.setState({isCardClicked: true})} className="small-movie-card catalog__movies-card"

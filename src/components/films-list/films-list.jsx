@@ -43,8 +43,8 @@ export class Films extends React.PureComponent {
       poster = {film.poster_image}
       id = {film.id}
       preview={film.preview_video_link}
-      onFilmCardOver = {this.cardOverHandler}
-      onFilmCardOut = {this.cardOutHandler}
+      // onFilmCardOver = {this.cardOverHandler}
+      // onFilmCardOut = {this.cardOutHandler}
     />);
   }
 }

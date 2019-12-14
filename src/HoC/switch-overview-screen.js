@@ -1,45 +1,76 @@
 import React from 'react';
-import {Switch, Route} from "react-router-dom";
+import {Switch, Route, Link} from "react-router-dom";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {compose} from "recompose";
 
-export const withFilmOverview = (Component) => {
+import {SmallMovieCard} from "../components/small-movie-card/small-movie-card";
+
+const withFilmOverview = (Component) => {
+
   class WithFilmOverview extends React.PureComponent {
     constructor(props) {
       super(props);
     }
 
+    _getFilmById() {
+      const {id, films} = this.props;
+      const film = films.find((it) => it.id === id);
+      console.log(film);
+      return film;
+    }
+
+    _getRelatedFilms() {
+      const {films} = this.props;
+      const choosenFilm = this._getFilmById();
+      const relatedFilmList = films.filter((it) => it.genre === choosenFilm.genre);
+      return relatedFilmList;
+    }
+
     render() {
+      const choosenFilm = this._getFilmById();
+      const relatedFilms = this._getRelatedFilms();
+
+      const posterBackgroundColor = {
+        backgroundColor: choosenFilm.background_color,
+      };
+
       return <>
-      <section className="movie-card movie-card--full">
+      <section className="movie-card movie-card--full" style={posterBackgroundColor}>
         <div className="movie-card__hero">
           <div className="movie-card__bg">
-            <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+            <img src={`${choosenFilm.background_image}`} alt={`${choosenFilm.name}`} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
 
           <header className="page-header movie-card__head">
             <div className="logo">
-              <a href="main.html" className="logo__link">
+              <Link to="/" className="logo__link">
                 <span className="logo__letter logo__letter--1">W</span>
                 <span className="logo__letter logo__letter--2">T</span>
                 <span className="logo__letter logo__letter--3">W</span>
-              </a>
+              </Link>
             </div>
 
-            <div className="user-block">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+            {this.props.isAuthorizationRequired
+              ? <div className="user-block">
+                <Link to="/login" className="user-block__link">Sign in</Link>
               </div>
-            </div>
+              : <div className="user-block">
+                <div className="user-block__avatar">
+                  <img src={`https://htmlacademy-react-2.appspot.com${this.props.avatarSrc}`} alt="User avatar" width="63" height="63" />
+                </div>
+              </div>
+            }
           </header>
 
           <div className="movie-card__wrap">
             <div className="movie-card__desc">
-              <h2 className="movie-card__title">The Grand Budapest Hotel</h2>
+              <h2 className="movie-card__title">{choosenFilm.name}</h2>
               <p className="movie-card__meta">
-                <span className="movie-card__genre">Drama</span>
-                <span className="movie-card__year">2014</span>
+                <span className="movie-card__genre">{choosenFilm.genre}</span>
+                <span className="movie-card__year">{choosenFilm.released}</span>
               </p>
 
               <div className="movie-card__buttons">
@@ -49,12 +80,22 @@ export const withFilmOverview = (Component) => {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list movie-card__button" type="button">
-                  <svg viewBox="0 0 18 14" width="18" height="14">
-                    <use xlinkHref="#in-list"></use>
-                  </svg>
-                  <span>My list</span>
-                </button>
+
+                {choosenFilm.is_favorite
+                  ? <button className="btn btn--list movie-card__button" type="button">
+                    <svg viewBox="0 0 18 14" width="18" height="14">
+                      <use xlinkHref="#in-list"></use>
+                    </svg>
+                    <span>My list</span>
+                  </button>
+                  : <button className="btn btn--list movie-card__button" type="button">
+                    <svg viewBox="0 0 19 20" width="19" height="20">
+                      <use xlinkHref="#add"></use>
+                    </svg>
+                    <span>My list</span>
+                  </button>
+                }
+
                 <a href="add-review.html" className="btn movie-card__button">Add review</a>
               </div>
             </div>
@@ -64,7 +105,7 @@ export const withFilmOverview = (Component) => {
         <div className="movie-card__wrap movie-card__translate-top">
           <div className="movie-card__info">
             <div className="movie-card__poster movie-card__poster--big">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={`${choosenFilm.poster_image}`} alt="The Grand Budapest Hotel poster" width="218" height="327" />
             </div>
 
             <div className="movie-card__desc">
@@ -82,8 +123,9 @@ export const withFilmOverview = (Component) => {
                 </ul>
               </nav>
               <Switch>
-                <Route to="/overview" component={() => <Component
-                  filmId={this.props.id}
+                <Route to="/films/:id/overview" component={() => <Component
+                  {...this.props}
+                  film = {choosenFilm}
                 />} />
               </Switch>
             </div>
@@ -95,41 +137,14 @@ export const withFilmOverview = (Component) => {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__movies-list">
-            <article className="small-movie-card catalog__movies-card">
-              <div className="small-movie-card__image">
-                <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg" alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175" />
-              </div>
-              <h3 className="small-movie-card__title">
-                <a className="small-movie-card__link" href="movie-page.html">Fantastic Beasts: The Crimes of Grindelwald</a>
-              </h3>
-            </article>
-
-            <article className="small-movie-card catalog__movies-card">
-              <div className="small-movie-card__image">
-                <img src="img/bohemian-rhapsody.jpg" alt="Bohemian Rhapsody" width="280" height="175" />
-              </div>
-              <h3 className="small-movie-card__title">
-                <a className="small-movie-card__link" href="movie-page.html">Bohemian Rhapsody</a>
-              </h3>
-            </article>
-
-            <article className="small-movie-card catalog__movies-card">
-              <div className="small-movie-card__image">
-                <img src="img/macbeth.jpg" alt="Macbeth" width="280" height="175" />
-              </div>
-              <h3 className="small-movie-card__title">
-                <a className="small-movie-card__link" href="movie-page.html">Macbeth</a>
-              </h3>
-            </article>
-
-            <article className="small-movie-card catalog__movies-card">
-              <div className="small-movie-card__image">
-                <img src="img/aviator.jpg" alt="Aviator" width="280" height="175" />
-              </div>
-              <h3 className="small-movie-card__title">
-                <a className="small-movie-card__link" href="movie-page.html">Aviator</a>
-              </h3>
-            </article>
+            {relatedFilms.map((film) => <SmallMovieCard
+              key = {film.id}
+              name = {film.name}
+              img = {film.preview_image}
+              poster = {film.poster_image}
+              id = {film.id}
+              preview={film.preview_video_link}
+            />)}
           </div>
         </section>
 
@@ -153,7 +168,23 @@ export const withFilmOverview = (Component) => {
 
   WithFilmOverview.propTypes = {
     id: PropTypes.number,
+    films: PropTypes.array,
+    avatarSrc: PropTypes.string,
+    isAuthorizationRequired: PropTypes.bool,
   };
 
   return WithFilmOverview;
 };
+
+const mapStateToProps = (state) => {
+  return {
+    films: state.filterReducer.filmsList,
+    avatarSrc: state.authorizationReducer.avatar_url,
+    isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
+  };
+};
+
+export default compose(
+    connect(mapStateToProps),
+    withFilmOverview
+);

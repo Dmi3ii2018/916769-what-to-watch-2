@@ -1,5 +1,5 @@
 import React from "react";
-import {SmallMovieCard} from "../small-movie-card/small-movie-card";
+import SmallMovieCard from "../small-movie-card/small-movie-card";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getFilmsListByGenre} from "../../selectors/genre-selector";

@@ -8,6 +8,7 @@ export const initialState = {
   genre: INITIAL_GENRE,
   filmsList: [],
   isAuthorizationRequired: true,
+  choosenFilmId: -1,
 };
 
 const ActionType = {
@@ -16,6 +17,7 @@ const ActionType = {
   LOAD_PROFILE: `LOAD_PROFILE`,
   LOAD_FAVORITE: `LOAD_FAVORITE`,
   POST_FAVORITE_MOVIES: `POST_FAVORITE_MOVIES`,
+  CHOOSE_FILM: `CHOOSE_FILM`,
 };
 
 export const ActionCreator = {
@@ -51,6 +53,13 @@ export const ActionCreator = {
     return {
       type: ActionType.LOAD_FAVORITE,
       payload: data,
+    };
+  },
+
+  chooseFilm: (id) => {
+    return {
+      type: ActionType.CHOOSE_FILM,
+      payload: id,
     };
   }
 };

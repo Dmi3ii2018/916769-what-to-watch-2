@@ -17,6 +17,11 @@ export const filterReducer = (state = initialState, action) => {
         favoriteFilms: action.payload
       });
 
+    case `CHOOSE_FILM`:
+      return Object.assign({}, state, {
+        choosenFilmId: action.payload
+      });
+
     default:
       return state;
   }

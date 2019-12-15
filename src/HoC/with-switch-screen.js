@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import {connect} from "react-redux";
-// import {compose} from "recompose";
-import {Switch, Route, Redirect} from "react-router-dom";
+import {connect} from "react-redux";
+import {compose} from "recompose";
+import {Switch, Route} from "react-router-dom";
 
 import {SignIn} from "../components/sign-in/sign-in";
 import {MainPage} from "../components/main/main";
@@ -23,17 +23,18 @@ export const withScreenSwitch = (Component) => {
     }
 
     render() {
+      const {id} = this.props;
       return <Switch>
         <Route path="/" exact render={() => <Component
           {...this.props}
           renderScreen={this._getScreen}
         />} />
         <Route path="/login" exact component={SignInWrapped} />
-        <Route path="/films/:id/review" component={FilmAddReview} />
+        <Route path="/films/:id/review" exact component={FilmAddReview} />
         <Route path="/mylist" component={MyFilmList} />
-        <Route path="/films/:id" render={(props) => <FilmOverviewWrapped
+        <Route path="/films/:id" exact render={() => <FilmOverviewWrapped
           {...this.props}
-          id = {props.location.state.id}
+          id = {id}
         />} />
       </Switch>;
     }
@@ -48,6 +49,7 @@ export const withScreenSwitch = (Component) => {
 
   WithScreenSwitch.propTypes = {
     isAuthorizationRequired: PropTypes.bool,
+    id: PropTypes.number,
   };
 
   return WithScreenSwitch;
@@ -55,13 +57,13 @@ export const withScreenSwitch = (Component) => {
 
 // export {withScreenSwitch};
 
-// const mapStateToProps = (state) => {
-//   return {
-//     isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
-//   };
-// };
+const mapStateToProps = (state) => {
+  return {
+    id: state.filterReducer.choosenFilmId,
+  };
+};
 
-// export default compose(
-//     connect(mapStateToProps),
-//     withScreenSwitch
-// );
+export default compose(
+    connect(mapStateToProps),
+    withScreenSwitch
+);

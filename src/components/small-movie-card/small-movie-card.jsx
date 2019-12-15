@@ -2,8 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import {VideoPreview} from "../video-preview/video-preview";
 import {Redirect} from "react-router-dom";
+import {connect} from "react-redux";
 
-export class SmallMovieCard extends React.PureComponent {
+import {ActionCreator} from "../../reducer/root-reducer";
+
+class SmallMovieCard extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -27,14 +30,14 @@ export class SmallMovieCard extends React.PureComponent {
   }
 
   render() {
-    const {name, img, id, preview} = this.props;
-    const {isVideoPreviewPlaying, isCardClicked} = this.state;
+    const {name, img, id, preview, choosenFilm, setCardClicked} = this.props;
+    const {isVideoPreviewPlaying} = this.state;
 
-    if (isCardClicked) {
-      return <Redirect to={{pathname: `/films/${id}`, state: {id}}} />;
+    if (choosenFilm > 0) {
+      return <Redirect to={`/films/${id}`} />;
     }
 
-    return <article onClick={() => this.setState({isCardClicked: true})} className="small-movie-card catalog__movies-card"
+    return <article onClick={() => setCardClicked(id)} className="small-movie-card catalog__movies-card"
       onMouseOver={() => this._filmCardOverHandler(id)}
       onMouseOut={this._filmCardOutHandler}>
       {isVideoPreviewPlaying
@@ -59,6 +62,21 @@ SmallMovieCard.propTypes = {
   id: PropTypes.number.isRequired,
   poster: PropTypes.string,
   preview: PropTypes.string.isRequired,
+  choosenFilm: PropTypes.number.isRequired,
   onFilmCardOver: PropTypes.func,
   onFilmCardOut: PropTypes.func,
+  setCardClicked: PropTypes.func.isRequired,
 };
+
+
+const mapStateToProps = (state) => ({
+  choosenFilm: state.filterReducer.choosenFilmId,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setCardClicked: (id) => {
+    dispatch(ActionCreator.chooseFilm(id));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SmallMovieCard);

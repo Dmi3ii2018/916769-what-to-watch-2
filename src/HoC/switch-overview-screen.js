@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {compose} from "recompose";
 
-import {SmallMovieCard} from "../components/small-movie-card/small-movie-card";
+import SmallMovieCard from "../components/small-movie-card/small-movie-card";
+import {FilmDetails} from "../components/film-details/film-details";
 
 const withFilmOverview = (Component) => {
 
@@ -23,8 +24,8 @@ const withFilmOverview = (Component) => {
     _getRelatedFilms() {
       const {films} = this.props;
       const choosenFilm = this._getFilmById();
-      const relatedFilmList = films.filter((it) => it.genre === choosenFilm.genre);
-      return relatedFilmList;
+      const relatedFilmsList = films.filter((it) => it.genre === choosenFilm.genre);
+      return relatedFilmsList;
     }
 
     render() {
@@ -112,10 +113,10 @@ const withFilmOverview = (Component) => {
               <nav className="movie-nav movie-card__nav">
                 <ul className="movie-nav__list">
                   <li className="movie-nav__item movie-nav__item--active">
-                    <a href="#" className="movie-nav__link">Overview</a>
+                    <Link to="/films/:id/overview" className="movie-nav__link">Overview</Link>
                   </li>
                   <li className="movie-nav__item">
-                    <a href="#" className="movie-nav__link">Details</a>
+                    <Link to="/films/details" className="movie-nav__link">Details</Link>
                   </li>
                   <li className="movie-nav__item">
                     <a href="#" className="movie-nav__link">Reviews</a>
@@ -123,7 +124,11 @@ const withFilmOverview = (Component) => {
                 </ul>
               </nav>
               <Switch>
-                <Route to="/films/:id/overview" component={() => <Component
+                <Route to="/films/:id/overview" render={() => <Component
+                  {...this.props}
+                  film = {choosenFilm}
+                />} />
+                <Route to="/films/details" render={() => <FilmDetails
                   {...this.props}
                   film = {choosenFilm}
                 />} />

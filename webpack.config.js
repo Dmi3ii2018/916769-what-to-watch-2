@@ -7,11 +7,16 @@ module.exports = {
     path: path.join(__dirname, `public`)
   },
   devServer: {
+    historyApiFallback: {
+      rewrites: [{
+        from: /./,
+        to: `/`,
+      }]
+    },
     contentBase: path.join(__dirname, `public`),
     compress: false,
     open: true,
     port: 1337,
-    historyApiFallback: true,
   },
   resolve: {
     extensions: [`.js`, `.jsx`]

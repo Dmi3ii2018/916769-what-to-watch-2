@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {setFilter, filterFilms} from "../../actions/actions";
 import {connect} from "react-redux";
 import {createFilterList} from "../../selectors/genre-selector";
+import {withRouter} from "react-router-dom";
 
 export class Genres extends React.PureComponent {
   constructor(props) {
@@ -50,4 +51,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-export const GenresList = connect(mapStateToProps, mapDispatchToProps)(Genres);
+export const GenresList = withRouter(connect(mapStateToProps, mapDispatchToProps)(Genres));

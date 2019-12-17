@@ -22,6 +22,11 @@ export const filterReducer = (state = initialState, action) => {
         choosenFilmId: action.payload
       });
 
+    case `LOAD_PROMO`:
+      return Object.assign({}, state, {
+        promoFilm: action.payload,
+      });
+
     default:
       return state;
   }

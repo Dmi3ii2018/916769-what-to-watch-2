@@ -3,7 +3,7 @@ import {Operation} from "../reducer/root-reducer";
 import {compose} from "recompose";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {Redirect} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 
 const withSignIn = (Component) => {
   class WithSignIn extends React.PureComponent {
@@ -34,7 +34,7 @@ const withSignIn = (Component) => {
     render() {
       // const {redirect} = this.state;
 
-      if (!this.props.isAuthorizationRequired) {
+      if (this.props.isAuthorizationRequired === false) {
         return <Redirect to="/" />;
       }
 
@@ -67,6 +67,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 
 export default compose(
+    withRouter,
     connect(mapStateToProps, mapDispatchToProps),
     withSignIn
 );

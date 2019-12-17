@@ -1,36 +1,49 @@
 import React from 'react';
-import {Switch, Route, Link} from "react-router-dom";
+import {Switch, Route, Link, withRouter, Redirect} from "react-router-dom";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {compose} from "recompose";
 
+
 import SmallMovieCard from "../components/small-movie-card/small-movie-card";
 import {FilmDetails} from "../components/film-details/film-details";
+import {Operation} from "../reducer/root-reducer";
+
+const checkSignInAuth = (isAuthorizationRequired) => {
+  if (isAuthorizationRequired) {
+    return <Redirect to="/login" />;
+  }
+  return null;
+};
 
 const withFilmOverview = (Component) => {
 
   class WithFilmOverview extends React.PureComponent {
     constructor(props) {
       super(props);
+
+      this.state = {
+        isFavorite: ``,
+      };
     }
 
-    _getFilmById() {
-      const {id, films} = this.props;
-      const film = films.find((it) => it.id === id);
+    _getFilmById(films, paramsId) {
+      const film = films.find((it) => {
+        return it.id === +paramsId;
+      });
       console.log(film);
       return film;
     }
 
-    _getRelatedFilms() {
-      const {films} = this.props;
-      const choosenFilm = this._getFilmById();
+    _getRelatedFilms(choosenFilm, films) {
       const relatedFilmsList = films.filter((it) => it.genre === choosenFilm.genre);
       return relatedFilmsList;
     }
 
     render() {
-      const choosenFilm = this._getFilmById();
-      const relatedFilms = this._getRelatedFilms();
+      const {match, isAuthorizationRequired, films, avatarSrc} = this.props;
+      const choosenFilm = this._getFilmById(films, match.params.id);
+      const relatedFilms = this._getRelatedFilms(choosenFilm, films);
 
       const posterBackgroundColor = {
         backgroundColor: choosenFilm.background_color,
@@ -54,13 +67,15 @@ const withFilmOverview = (Component) => {
               </Link>
             </div>
 
-            {this.props.isAuthorizationRequired
+            {isAuthorizationRequired
               ? <div className="user-block">
                 <Link to="/login" className="user-block__link">Sign in</Link>
               </div>
               : <div className="user-block">
                 <div className="user-block__avatar">
-                  <img src={`https://htmlacademy-react-2.appspot.com${this.props.avatarSrc}`} alt="User avatar" width="63" height="63" />
+                  <Link to="/mylist">
+                    <img src={`https://htmlacademy-react-2.appspot.com${avatarSrc}`} alt="User avatar" width="63" height="63" />
+                  </Link>
                 </div>
               </div>
             }
@@ -83,18 +98,32 @@ const withFilmOverview = (Component) => {
                 </button>
 
                 {choosenFilm.is_favorite
-                  ? <button className="btn btn--list movie-card__button" type="button">
+                  ? <button onClick={() => {
+                    console.log("321");
+                    if (isAuthorizationRequired) {
+                      return <Redirect to="/login" />;
+                    }
+                    return this.props.setFavorite(choosenFilm.id, choosenFilm.is_favorite);
+                  }} className="btn btn--list movie-card__button" type="button">
                     <svg viewBox="0 0 18 14" width="18" height="14">
                       <use xlinkHref="#in-list"></use>
                     </svg>
                     <span>My list</span>
                   </button>
-                  : <button className="btn btn--list movie-card__button" type="button">
+                  : <Link to={`${isAuthorizationRequired ? `/login` : this.props.match.url}`} onClick={() => {
+                    console.log("123");
+                    if (isAuthorizationRequired) {
+                      return console.log("Hey");
+                    } else {
+                      console.log("added");
+                      return this.props.setFavorite(choosenFilm.id, choosenFilm.is_favorite);
+                    }
+                  }} className="btn btn--list movie-card__button" type="button">
                     <svg viewBox="0 0 19 20" width="19" height="20">
                       <use xlinkHref="#add"></use>
                     </svg>
                     <span>My list</span>
-                  </button>
+                  </Link>
                 }
 
                 <a href="add-review.html" className="btn movie-card__button">Add review</a>
@@ -112,11 +141,11 @@ const withFilmOverview = (Component) => {
             <div className="movie-card__desc">
               <nav className="movie-nav movie-card__nav">
                 <ul className="movie-nav__list">
-                  <li className="movie-nav__item movie-nav__item--active">
-                    <Link to="/films/:id/overview" className="movie-nav__link">Overview</Link>
+                  <li className="movie-nav__item">
+                    <Link to={`${match.url}`} className="movie-nav__link">Overview</Link>
                   </li>
                   <li className="movie-nav__item">
-                    <Link to="/films/details" className="movie-nav__link">Details</Link>
+                    <Link to={`${match.url}/details`} className="movie-nav__link">Details</Link>
                   </li>
                   <li className="movie-nav__item">
                     <a href="#" className="movie-nav__link">Reviews</a>
@@ -124,14 +153,16 @@ const withFilmOverview = (Component) => {
                 </ul>
               </nav>
               <Switch>
-                <Route to="/films/:id/overview" render={() => <Component
+                <Route path={`${match.path}`} exact render={() => <Component
                   {...this.props}
                   film = {choosenFilm}
                 />} />
-                <Route to="/films/details" render={() => <FilmDetails
-                  {...this.props}
-                  film = {choosenFilm}
-                />} />
+                <Route path={`${match.path}/details`} >
+                  <FilmDetails
+                    {...this.props}
+                    film = {choosenFilm}
+                  />
+                </Route>
               </Switch>
             </div>
           </div>
@@ -142,13 +173,14 @@ const withFilmOverview = (Component) => {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__movies-list">
-            {relatedFilms.map((film) => <SmallMovieCard
-              key = {film.id}
+            {relatedFilms.map((film, i) => <SmallMovieCard
+              key = {`${film.id}_${i}`}
               name = {film.name}
               img = {film.preview_image}
               poster = {film.poster_image}
               id = {film.id}
               preview={film.preview_video_link}
+              isClicked={false}
             />)}
           </div>
         </section>
@@ -189,7 +221,16 @@ const mapStateToProps = (state) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setFavorite: (id, status) => {
+      dispatch(Operation.postFavoriteFilms(id, status));
+    }
+  };
+};
+
 export default compose(
-    connect(mapStateToProps),
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps),
     withFilmOverview
 );

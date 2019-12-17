@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {VideoPreview} from "../video-preview/video-preview";
-import {Redirect} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
 import {ActionCreator} from "../../reducer/root-reducer";
@@ -12,7 +12,7 @@ class SmallMovieCard extends React.PureComponent {
 
     this.state = {
       isVideoPreviewPlaying: false,
-      isCardClicked: false,
+      isCardClicked: this.props.isClicked,
     };
 
     this._filmCardOverHandler = this._filmCardOverHandler.bind(this);
@@ -30,16 +30,20 @@ class SmallMovieCard extends React.PureComponent {
   }
 
   render() {
-    const {name, img, id, preview, choosenFilm, setCardClicked} = this.props;
-    const {isVideoPreviewPlaying} = this.state;
+    const {name, img, id, preview, setCardClicked} = this.props;
+    const {isVideoPreviewPlaying, isCardClicked} = this.state;
 
-    if (choosenFilm > 0) {
+    if (isCardClicked) {
       return <Redirect to={`/films/${id}`} />;
     }
 
-    return <article onClick={() => setCardClicked(id)} className="small-movie-card catalog__movies-card"
-      onMouseOver={() => this._filmCardOverHandler(id)}
-      onMouseOut={this._filmCardOutHandler}>
+    return <article onClick={() => {
+      setCardClicked(id);
+      this.setState({isCardClicked: true});
+    }}
+    className="small-movie-card catalog__movies-card"
+    onMouseOver={() => this._filmCardOverHandler(id)}
+    onMouseOut={this._filmCardOutHandler}>
       {isVideoPreviewPlaying
         ? <VideoPreview
           previewSrc={preview} />
@@ -79,4 +83,4 @@ const mapDispatchToProps = (dispatch) => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SmallMovieCard);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SmallMovieCard));

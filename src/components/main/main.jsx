@@ -1,23 +1,42 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 import {FilmsList} from "../films-list/films-list";
 import {GenresList} from "../../components/geners-list/genres-list";
+import {Operation} from "../../reducer/root-reducer";
 
 export class Main extends React.PureComponent {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isFavorite: false,
+    };
+  }
+
+  _promoFilmToFilm(promoId, filmList) {
+    console.log(this.props);
+    const film = filmList.find((it) => {
+      return it.id === promoId;
+    });
+    return film;
   }
 
   render() {
-    const {filmData, onHeaderClick} = this.props;
+    const {filmData, onHeaderClick, promoFilm, isAuthorizationRequired, renderFavoriteFilms} = this.props;
+    console.log(this.props);
+    const promoInFilmList = this._promoFilmToFilm(promoFilm.id, filmData);
+    console.log(promoInFilmList);
+    const posterBackgroundColor = {
+      backgroundColor: promoFilm.background_color,
+    };
 
     return <>
-    <section className="movie-card">
+    <section className="movie-card" style={posterBackgroundColor}>
       <div className="movie-card__bg">
-        <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+        <img src={`${promoFilm.background_image}`} alt="The Grand Budapest Hotel" />
       </div>
 
       <h1 className="visually-hidden">WTW</h1>
@@ -30,13 +49,15 @@ export class Main extends React.PureComponent {
           </a>
         </div>
 
-        {this.props.isAuthorizationRequired
+        {isAuthorizationRequired
           ? <div className="user-block">
             <Link to="/login" className="user-block__link">Sign in</Link>
           </div>
           : <div className="user-block">
             <div className="user-block__avatar">
-              <img src={`https://htmlacademy-react-2.appspot.com${this.props.avatarSrc}`} alt="User avatar" width="63" height="63" />
+              <Link to="/mylist">
+                <img src={`https://htmlacademy-react-2.appspot.com${this.props.avatarSrc}`} alt="User avatar" width="63" height="63" />
+              </Link>
             </div>
           </div>
         }
@@ -46,14 +67,14 @@ export class Main extends React.PureComponent {
       <div className="movie-card__wrap">
         <div className="movie-card__info">
           <div className="movie-card__poster">
-            <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+            <img src={`${promoFilm.poster_image}`} alt="The Grand Budapest Hotel poster" width="218" height="327" />
           </div>
 
           <div className="movie-card__desc">
-            <h2 className="movie-card__title" onClick={onHeaderClick}>The Grand Budapest Hotel</h2>
+            <h2 className="movie-card__title" onClick={onHeaderClick}>{promoFilm.name}</h2>
             <p className="movie-card__meta">
-              <span className="movie-card__genre">Drama</span>
-              <span className="movie-card__year">2014</span>
+              <span className="movie-card__genre">{promoFilm.genre}</span>
+              <span className="movie-card__year">{promoFilm.released}</span>
             </p>
 
             <div className="movie-card__buttons">
@@ -63,12 +84,32 @@ export class Main extends React.PureComponent {
                 </svg>
                 <span>Play</span>
               </button>
-              <button className="btn btn--list movie-card__button" type="button">
-                <svg viewBox="0 0 19 20" width="19" height="20">
-                  <use xlinkHref="#add"></use>
-                </svg>
-                <span>My list</span>
-              </button>
+
+              {promoFilm.is_favorite
+                ? <button onClick={() => {
+                  console.log("321");
+                  // checkSignInAuth(isAuthorizationRequired);
+                  this.setState({isFavorite: false});
+                  this.props.setFavorite(promoFilm.id, promoFilm.is_favorite);
+                }} className="btn btn--list movie-card__button" type="button">
+                  <svg viewBox="0 0 18 14" width="18" height="14">
+                    <use xlinkHref="#in-list"></use>
+                  </svg>
+                  <span>My list</span>
+                </button>
+                : <button onClick={() => {
+                  console.log("123");
+                  // checkSignInAuth(isAuthorizationRequired);
+                  this.setState({isFavorite: true});
+                  this.props.setFavorite(promoFilm.id, promoFilm.is_favorite);
+                }} className="btn btn--list movie-card__button" type="button">
+                  <svg viewBox="0 0 19 20" width="19" height="20">
+                    <use xlinkHref="#add"></use>
+                  </svg>
+                  <span>My list</span>
+                </button>
+              }
+
             </div>
           </div>
         </div>
@@ -110,16 +151,25 @@ export class Main extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-  filmData: state.filmsList,
   avatarSrc: state.authorizationReducer.avatar_url,
   isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
+  promoFilm: state.filterReducer.promoFilm,
+  filmData: state.filterReducer.filmsList,
 });
 
-export const MainPage = connect(mapStateToProps)(Main);
+const mapDispatchToProps = (dispatch) => ({
+  setFavorite: (id, status) => {
+    dispatch(Operation.postFavoriteFilms(id, status));
+  },
+});
+
+export const MainPage = withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
 
 Main.propTypes = {
   onHeaderClick: PropTypes.func,
   filmData: PropTypes.array,
   avatarSrc: PropTypes.string,
   isAuthorizationRequired: PropTypes.bool,
+  promoFilm: PropTypes.object.isRequired,
+  setFavorite: PropTypes.func.isRequired,
 };

@@ -8,7 +8,7 @@ export const initialState = {
   genre: INITIAL_GENRE,
   filmsList: [],
   isAuthorizationRequired: true,
-  choosenFilmId: -1,
+  choosenFilmId: 0,
 };
 
 const ActionType = {
@@ -18,6 +18,7 @@ const ActionType = {
   LOAD_FAVORITE: `LOAD_FAVORITE`,
   POST_FAVORITE_MOVIES: `POST_FAVORITE_MOVIES`,
   CHOOSE_FILM: `CHOOSE_FILM`,
+  GET_PROMO: `LOAD_PROMO`,
 };
 
 export const ActionCreator = {
@@ -61,6 +62,13 @@ export const ActionCreator = {
       type: ActionType.CHOOSE_FILM,
       payload: id,
     };
+  },
+
+  getPromo: (data) => {
+    return {
+      type: ActionType.GET_PROMO,
+      payload: data,
+    };
   }
 };
 
@@ -70,6 +78,7 @@ export const Operation = {
       .then((response) => {
         dispatch(ActionCreator.loadFilms(response.data));
         console.log(response);
+        console.log(_getState());
       });
   },
 
@@ -89,7 +98,7 @@ export const Operation = {
   },
 
   loadFavoriteFilms: () => (dispatch, _getState, api) => {
-    return api .get(`/favorite`)
+    return api.get(`/favorite`)
       .then((response) => {
         dispatch(ActionCreator.loadFavorite(response.data));
         console.log(response);
@@ -97,9 +106,17 @@ export const Operation = {
   },
 
   postFavoriteFilms: (id, isFavorite) => (dispatch, _getState, api) => {
-    return api .post(`/favorite/: ${id}/: ${isFavorite}`)
+    let newApi = api.post(`/favorite/${id}/${!isFavorite ? 1 : 0}`);
+    return newApi.then((response) => {
+      dispatch(ActionCreator.postFavorite(response.data));
+      dispatch(Operation.loadFilms());
+    });
+  },
+
+  loadPromoFilm: () => (dispatch, _getState, api) => {
+    return api.get(`/films/promo`)
       .then((response) => {
-        dispatch(ActionCreator.postFavorite(response.data));
+        dispatch(ActionCreator.getPromo(response.data));
         console.log(response);
       });
   }

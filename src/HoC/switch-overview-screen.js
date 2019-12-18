@@ -26,7 +26,6 @@ const withFilmOverview = (Component) => {
       const film = films.find((it) => {
         return it.id === +paramsId;
       });
-      console.log(film);
       return film;
     }
 
@@ -94,7 +93,6 @@ const withFilmOverview = (Component) => {
 
                 {choosenFilm.is_favorite
                   ? <button onClick={() => {
-                    console.log("321");
                     if (isAuthorizationRequired) {
                       return <Redirect to="/login" />;
                     }
@@ -106,11 +104,9 @@ const withFilmOverview = (Component) => {
                     <span>My list</span>
                   </button>
                   : <Link to={`${isAuthorizationRequired ? `/login` : this.props.match.url}`} onClick={() => {
-                    console.log("123");
                     if (isAuthorizationRequired) {
-                      return console.log("Hey");
+                      return <Redirect to="/login" />;
                     } else {
-                      console.log("added");
                       return this.props.setFavorite(choosenFilm.id, choosenFilm.is_favorite);
                     }
                   }} className="btn btn--list movie-card__button" type="button">
@@ -122,9 +118,10 @@ const withFilmOverview = (Component) => {
                 }
 
                 <Link to={{
-                  pathname: `${isAuthorizationRequired ? `/login` : `/films/${choosenFilm.id}/addreview`}`,
+                  pathname: `${isAuthorizationRequired ? `/login` : `films/${choosenFilm.id}/addreview`}`,
                   state: choosenFilm,
-                }} className="btn movie-card__button">Add review</Link>
+                }}
+                className="btn movie-card__button">Add review</Link>
               </div>
             </div>
           </div>
@@ -212,6 +209,10 @@ const withFilmOverview = (Component) => {
     films: PropTypes.array,
     avatarSrc: PropTypes.string,
     isAuthorizationRequired: PropTypes.bool,
+    match: PropTypes.object,
+    getComments: PropTypes.func,
+    setFavorite: PropTypes.func,
+    comments: PropTypes.array,
   };
 
   return WithFilmOverview;

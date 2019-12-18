@@ -14,7 +14,6 @@ export const createAPI = (dispatch) => {
   const onFail = (err) => {
     if (err.response.status === 401) {
       dispatch(ActionCreator.requireAuthorization(true));
-      console.log("redirectus");
       return <Redirect to="/login" />;
     }
     return err;

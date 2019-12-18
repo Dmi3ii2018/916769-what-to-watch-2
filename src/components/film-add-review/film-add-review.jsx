@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {compose} from "recompose";
 import {withRouter, Link, Redirect} from "react-router-dom";
 import {Operation} from "../../reducer/root-reducer";
 
@@ -31,10 +30,8 @@ class FilmAddReview extends React.PureComponent {
   }
 
   render() {
-    console.log(this.props);
-    console.log(this.state);
     const {avatarSrc, submitHandler} = this.props;
-    const {rating, comment, film, isSuccessfull, isButtonDisable} = this.state;
+    const {rating, comment, film, isSuccessfull} = this.state;
 
     if (isSuccessfull) {
       return <Redirect to="films/{film.id}" />;
@@ -118,7 +115,7 @@ class FilmAddReview extends React.PureComponent {
                     this.setState({isSuccessfull: true});
                   })
                   .catch(() =>{
-                    this.setState({isButtonDisable: false})
+                    this.setState({isButtonDisable: false});
                   });
               }} className="add-review__btn" type="submit">Post</button>
             </div>
@@ -129,6 +126,12 @@ class FilmAddReview extends React.PureComponent {
     </section>;
   }
 }
+
+FilmAddReview.propTypes = {
+  avatarSrc: PropTypes.string.isRequired,
+  submitHandler: PropTypes.func,
+  location: PropTypes.object,
+};
 
 const mapStateToProps = (state) => {
   return {

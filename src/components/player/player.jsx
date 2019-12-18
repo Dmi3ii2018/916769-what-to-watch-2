@@ -1,6 +1,7 @@
 import React, {createRef} from 'react';
+import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {withRouter, Redirect, Link} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 
 class VideoPlayer extends React.PureComponent {
   constructor(props) {
@@ -15,7 +16,6 @@ class VideoPlayer extends React.PureComponent {
       isPlaying: true,
       duration: 0,
       isFullScreen: false,
-      isExitClicked: false,
     };
 
     this._onPlayButtonClick = this._onPlayButtonClick.bind(this);
@@ -25,7 +25,6 @@ class VideoPlayer extends React.PureComponent {
     const film = films.find((it) => {
       return it.id === +paramsId;
     });
-    console.log(film);
     return film;
   }
 
@@ -34,7 +33,7 @@ class VideoPlayer extends React.PureComponent {
   }
 
   render() {
-    const {progress, isPlaying, duration, isFullScreen, isExitClicked} = this.state;
+    const {progress, isPlaying, duration, isFullScreen} = this.state;
 
     const fullScreenStyle = {
       width: `${100}%`,
@@ -44,13 +43,12 @@ class VideoPlayer extends React.PureComponent {
     return <div className="player">
       <video
         ref={this._videoRef}
-        // src={`${this.choosenFilm.video_link}`}
         className="player__video"
         poster={`${this.choosenFilm.background_image}`}>
         style={`${isFullScreen ? fullScreenStyle : `` }`}
       </video>
 
-      <Link to={`films/${this.choosenFilm.id}`} type="button" onClick={() => this.setState({isExitClicked: true})} className="player__exit">Exit</Link>
+      <Link to={`films/${this.choosenFilm.id}`} type="button" className="player__exit">Exit</Link>
 
       <div className="player__controls">
         <div className="player__controls-row">
@@ -85,7 +83,6 @@ class VideoPlayer extends React.PureComponent {
     const src = this.choosenFilm.video_link;
     const video = this._videoRef.current;
     video.src = src;
-    console.dir(video);
 
     video.oncanplaythrough = () => this.setState({
       isLoading: false,
@@ -104,11 +101,6 @@ class VideoPlayer extends React.PureComponent {
     video.ontimeupdate = () => this.setState({
       progress: video.currentTime
     });
-
-    // if (this.state.isExitClicked) {
-    //   return <Redirect to={`films/${this.choosenFilm.id}`} />;
-    // }
-    // return ``;
   }
 
   componentDidUpdate() {
@@ -124,15 +116,6 @@ class VideoPlayer extends React.PureComponent {
       video.pause();
     }
   }
-
-  // componentWillUnmount() {
-  //   const video = this._audioRef.current;
-  //   video.oncanplaythrough = null;
-  //   video.onplay = null;
-  //   video.onpause = null;
-  //   video.ontimeupdate = null;
-  //   video.src = ``;
-  // }
 }
 
 const mapStateToProps = (state) => {
@@ -145,3 +128,8 @@ const mapStateToProps = (state) => {
 };
 
 export default withRouter(connect(mapStateToProps)(VideoPlayer));
+
+VideoPlayer.propTypes = {
+  films: PropTypes.array.isRequired,
+  match: PropTypes.object,
+};

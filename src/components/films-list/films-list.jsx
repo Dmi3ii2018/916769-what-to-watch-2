@@ -3,15 +3,6 @@ import SmallMovieCard from "../small-movie-card/small-movie-card";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getFilmsListByGenre} from "../../selectors/genre-selector";
-// import {INITIAL_GENRE} from "../../reducer/reducer";
-
-// const filterFilmsList = (state) => {
-//   if (state.genre !== INITIAL_GENRE) {
-//     const filteredFilmsList = state.filmsList.filter((film) => film.genre === state.genre);
-//     return filteredFilmsList;
-//   }
-//   return state.filmsList;
-// };
 
 export class Films extends React.PureComponent {
   constructor(props) {
@@ -43,8 +34,6 @@ export class Films extends React.PureComponent {
       poster = {film.poster_image}
       id = {film.id}
       preview={film.preview_video_link}
-      // onFilmCardOver = {this.cardOverHandler}
-      // onFilmCardOut = {this.cardOutHandler}
     />);
   }
 }

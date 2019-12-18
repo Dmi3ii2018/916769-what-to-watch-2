@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 const timeOptions = {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
+  year: `numeric`,
+  month: `long`,
+  day: `numeric`,
 };
 
 export const Comment = (props) => {
@@ -21,4 +22,8 @@ export const Comment = (props) => {
 
     <div className="review__rating">{comment.rating}</div>
   </div>;
+};
+
+Comment.propTypes = {
+  comment: PropTypes.object,
 };

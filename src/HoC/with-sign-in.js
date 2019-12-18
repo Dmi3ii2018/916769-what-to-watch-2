@@ -14,7 +14,6 @@ const withSignIn = (Component) => {
       this.state = {
         email: ``,
         password: ``,
-        // redirect: false,
       };
 
       this._submitFormHandler = this._submitFormHandler.bind(this);
@@ -24,7 +23,6 @@ const withSignIn = (Component) => {
     _submitFormHandler(evt) {
       evt.preventDefault();
       this.handleAuthorization(this.state);
-      console.log(this.state);
     }
 
     _inputChangeHandler(evt, stateItem) {
@@ -32,8 +30,6 @@ const withSignIn = (Component) => {
     }
 
     render() {
-      // const {redirect} = this.state;
-
       if (this.props.isAuthorizationRequired === false) {
         return <Redirect to="/" />;
       }

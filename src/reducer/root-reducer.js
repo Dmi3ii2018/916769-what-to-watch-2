@@ -93,8 +93,6 @@ export const Operation = {
     return api.get(`/films`)
       .then((response) => {
         dispatch(ActionCreator.loadFilms(response.data));
-        console.log(response);
-        console.log(_getState());
       });
   },
 
@@ -105,11 +103,9 @@ export const Operation = {
     })
       .then((response) => {
         dispatch(ActionCreator.loadProfile(response.data));
-        console.log(response);
       })
       .then(() => {
         dispatch(ActionCreator.requireAuthorization(false));
-        console.log(_getState());
       });
   },
 
@@ -117,7 +113,6 @@ export const Operation = {
     return api.get(`/favorite`)
       .then((response) => {
         dispatch(ActionCreator.loadFavorite(response.data));
-        console.log(response);
       });
   },
 
@@ -133,7 +128,6 @@ export const Operation = {
     return api.get(`/films/promo`)
       .then((response) => {
         dispatch(ActionCreator.getPromo(response.data));
-        console.log(response);
       });
   },
 
@@ -141,8 +135,6 @@ export const Operation = {
     return api.get(`/comments/${id}`)
       .then((response) => {
         dispatch(ActionCreator.getComments(response.data));
-        console.log(response);
-        console.log(_getState());
       });
   },
 
@@ -155,4 +147,3 @@ export const Operation = {
 };
 
 export const rootReducer = combineReducers({filterReducer, authorizationReducer});
-console.dir(rootReducer);

@@ -20,12 +20,10 @@ class SmallMovieCard extends React.PureComponent {
   }
 
   _filmCardOverHandler() {
-    // this.props.onFilmCardOver(id);
     this.setState({isVideoPreviewPlaying: true});
   }
 
   _filmCardOutHandler() {
-    // this.props.onFilmCardOut();
     this.setState({isVideoPreviewPlaying: false});
   }
 
@@ -70,6 +68,7 @@ SmallMovieCard.propTypes = {
   onFilmCardOver: PropTypes.func,
   onFilmCardOut: PropTypes.func,
   setCardClicked: PropTypes.func.isRequired,
+  isClicked: PropTypes.bool
 };
 
 

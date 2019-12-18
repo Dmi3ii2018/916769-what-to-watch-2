@@ -26,12 +26,9 @@ const init = () => {
   );
   store.dispatch(Operation.loadPromoFilm())
     .then(() => {
-      console.log(store.getState());
       store.dispatch(Operation.loadFilms());
-      console.log(store.getState());
     })
     .then(() => {
-      console.log(store.getState());
       ReactDOM.render(
           <Provider store={store}>
             <BrowserRouter>

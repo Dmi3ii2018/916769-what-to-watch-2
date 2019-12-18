@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter, Link} from "react-router-dom";
 import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
 import SmallMovieCard from "../small-movie-card/small-movie-card";
 
@@ -10,7 +11,7 @@ const getFavoriteFilms = (state) => {
     return it.is_favorite === true;
   });
   return favoriteFilms;
-}
+};
 
 const MyFilms = (props) => {
   const {favoriteFilms} = props;
@@ -73,3 +74,8 @@ const mapStateToProps = (state) => ({
 
 
 export default withRouter(connect(mapStateToProps)(MyFilms));
+
+MyFilms.propTypes = {
+  favoriteFilms: PropTypes.array,
+  avatarSrc: PropTypes.string.isRequired,
+};

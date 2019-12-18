@@ -13,7 +13,6 @@ import {FilmOverview} from "../components/film-overview/film-overview";
 import MyFilmList from "../components/my-film-list/my-film-list";
 import {Operation} from '../reducer/root-reducer';
 import VideoPlayer from "../components/player/player";
-// import {PrivateRoute} from "../HoC/private-route";
 
 const SignInWrapped = withSignIn(SignIn);
 const FilmOverviewWrapped = withFilmOverview(FilmOverview);
@@ -52,9 +51,6 @@ export const withScreenSwitch = (Component) => {
     }
 
     _getScreen() {
-      // if (this.props.isAuthorizationRequired) {
-      //   return <SignInWrapped />;
-      // }
       return <MainPage />;
     }
   }
@@ -62,12 +58,11 @@ export const withScreenSwitch = (Component) => {
   WithScreenSwitch.propTypes = {
     isAuthorizationRequired: PropTypes.bool,
     id: PropTypes.number,
+    getComments: PropTypes.func,
   };
 
   return WithScreenSwitch;
 };
-
-// export {withScreenSwitch};
 
 const mapStateToProps = (state) => {
   return {

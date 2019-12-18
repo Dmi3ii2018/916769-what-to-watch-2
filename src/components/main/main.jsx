@@ -17,7 +17,6 @@ export class Main extends React.PureComponent {
   }
 
   _promoFilmToFilm(promoId, filmList) {
-    console.log(this.props);
     const film = filmList.find((it) => {
       return it.id === promoId;
     });
@@ -25,10 +24,7 @@ export class Main extends React.PureComponent {
   }
 
   render() {
-    const {filmData, onHeaderClick, promoFilm, isAuthorizationRequired, renderFavoriteFilms} = this.props;
-    console.log(this.props);
-    const promoInFilmList = this._promoFilmToFilm(promoFilm.id, filmData);
-    console.log(promoInFilmList);
+    const {filmData, onHeaderClick, promoFilm, isAuthorizationRequired} = this.props;
     const posterBackgroundColor = {
       backgroundColor: promoFilm.background_color,
     };
@@ -78,7 +74,7 @@ export class Main extends React.PureComponent {
             </p>
 
             <div className="movie-card__buttons">
-              <Link to="/films/{promoFilm.id}/player" className="btn btn--play movie-card__button" type="button">
+              <Link to={`/films/${promoFilm.id}/player`} className="btn btn--play movie-card__button" type="button">
                 <svg viewBox="0 0 19 19" width="19" height="19">
                   <use xlinkHref="#play-s"></use>
                 </svg>
@@ -87,8 +83,6 @@ export class Main extends React.PureComponent {
 
               {promoFilm.is_favorite
                 ? <button onClick={() => {
-                  console.log("321");
-                  // checkSignInAuth(isAuthorizationRequired);
                   this.setState({isFavorite: false});
                   this.props.setFavorite(promoFilm.id, promoFilm.is_favorite);
                 }} className="btn btn--list movie-card__button" type="button">
@@ -98,8 +92,6 @@ export class Main extends React.PureComponent {
                   <span>My list</span>
                 </button>
                 : <button onClick={() => {
-                  console.log("123");
-                  // checkSignInAuth(isAuthorizationRequired);
                   this.setState({isFavorite: true});
                   this.props.setFavorite(promoFilm.id, promoFilm.is_favorite);
                 }} className="btn btn--list movie-card__button" type="button">

@@ -1,6 +1,6 @@
 import React from "react";
 import {shallow} from "enzyme";
-import {SmallMovieCard} from "./small-movie-card";
+import SmallMovieCard from "./small-movie-card";
 
 it(`Small movie card renders correctly`, () => {
   const tree = shallow(<SmallMovieCard

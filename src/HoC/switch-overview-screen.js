@@ -8,13 +8,8 @@ import {compose} from "recompose";
 import SmallMovieCard from "../components/small-movie-card/small-movie-card";
 import {FilmDetails} from "../components/film-details/film-details";
 import {Operation} from "../reducer/root-reducer";
+import FilmReview from "../components/film-review/film-review";
 
-const checkSignInAuth = (isAuthorizationRequired) => {
-  if (isAuthorizationRequired) {
-    return <Redirect to="/login" />;
-  }
-  return null;
-};
 
 const withFilmOverview = (Component) => {
 
@@ -41,7 +36,7 @@ const withFilmOverview = (Component) => {
     }
 
     render() {
-      const {match, isAuthorizationRequired, films, avatarSrc} = this.props;
+      const {match, isAuthorizationRequired, films, avatarSrc, getComments} = this.props;
       const choosenFilm = this._getFilmById(films, match.params.id);
       const relatedFilms = this._getRelatedFilms(choosenFilm, films);
 
@@ -90,12 +85,12 @@ const withFilmOverview = (Component) => {
               </p>
 
               <div className="movie-card__buttons">
-                <button className="btn btn--play movie-card__button" type="button">
+                <Link to={`/films/${choosenFilm.id}/player`} className="btn btn--play movie-card__button" type="button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
-                </button>
+                </Link>
 
                 {choosenFilm.is_favorite
                   ? <button onClick={() => {
@@ -126,7 +121,10 @@ const withFilmOverview = (Component) => {
                   </Link>
                 }
 
-                <a href="add-review.html" className="btn movie-card__button">Add review</a>
+                <Link to={{
+                  pathname: `${isAuthorizationRequired ? `/login` : `/films/${choosenFilm.id}/addreview`}`,
+                  state: choosenFilm,
+                }} className="btn movie-card__button">Add review</Link>
               </div>
             </div>
           </div>
@@ -148,7 +146,7 @@ const withFilmOverview = (Component) => {
                     <Link to={`${match.url}/details`} className="movie-nav__link">Details</Link>
                   </li>
                   <li className="movie-nav__item">
-                    <a href="#" className="movie-nav__link">Reviews</a>
+                    <Link to={`${match.url}/review`} onClick={() => getComments(choosenFilm.id)} className="movie-nav__link">Reviews</Link>
                   </li>
                 </ul>
               </nav>
@@ -161,6 +159,12 @@ const withFilmOverview = (Component) => {
                   <FilmDetails
                     {...this.props}
                     film = {choosenFilm}
+                  />
+                </Route>
+                <Route path={`${match.path}/review`} exact >
+                  <FilmReview
+                    {...this.props}
+                    comments={this.props.comments}
                   />
                 </Route>
               </Switch>
@@ -218,6 +222,7 @@ const mapStateToProps = (state) => {
     films: state.filterReducer.filmsList,
     avatarSrc: state.authorizationReducer.avatar_url,
     isAuthorizationRequired: state.authorizationReducer.isAuthorizationRequired,
+    comments: state.filterReducer.comments,
   };
 };
 
@@ -225,6 +230,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setFavorite: (id, status) => {
       dispatch(Operation.postFavoriteFilms(id, status));
+    },
+
+    getComments: (id) => {
+      dispatch(Operation.loadComments(id));
     }
   };
 };

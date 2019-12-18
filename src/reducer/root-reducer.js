@@ -19,6 +19,8 @@ const ActionType = {
   POST_FAVORITE_MOVIES: `POST_FAVORITE_MOVIES`,
   CHOOSE_FILM: `CHOOSE_FILM`,
   GET_PROMO: `LOAD_PROMO`,
+  GET_COMMENTS: `GET_COMMENTS`,
+  POST_COMMENNTS: `POST_COMMENTS`,
 };
 
 export const ActionCreator = {
@@ -68,6 +70,20 @@ export const ActionCreator = {
     return {
       type: ActionType.GET_PROMO,
       payload: data,
+    };
+  },
+
+  getComments: (data) => {
+    return {
+      type: ActionType.GET_COMMENTS,
+      payload: data,
+    };
+  },
+
+  postComments: (comment) => {
+    return {
+      type: ActionType.POST_COMMENNTS,
+      payload: comment,
     };
   }
 };
@@ -119,6 +135,22 @@ export const Operation = {
         dispatch(ActionCreator.getPromo(response.data));
         console.log(response);
       });
+  },
+
+  loadComments: (id) => (dispatch, _getState, api) => {
+    return api.get(`/comments/${id}`)
+      .then((response) => {
+        dispatch(ActionCreator.getComments(response.data));
+        console.log(response);
+        console.log(_getState());
+      });
+  },
+
+  postComments: (rating, comment, id) => (dispatch, _getState, api) => {
+    return api.post(`/comments/${id}`, {
+      rating,
+      comment,
+    });
   }
 };
 

@@ -7,11 +7,13 @@ import {Switch, Route, withRouter, Redirect} from "react-router-dom";
 import {SignIn} from "../components/sign-in/sign-in";
 import {MainPage} from "../components/main/main";
 import withSignIn from "../HoC/with-sign-in";
-import {FilmAddReview} from "../components/film-add-review/film-add-review";
+import FilmAddReview from "../components/film-add-review/film-add-review";
 import withFilmOverview from "../HoC/switch-overview-screen";
 import {FilmOverview} from "../components/film-overview/film-overview";
 import MyFilmList from "../components/my-film-list/my-film-list";
-import {PrivateRoute} from "../HoC/private-route";
+import {Operation} from '../reducer/root-reducer';
+import VideoPlayer from "../components/player/player";
+// import {PrivateRoute} from "../HoC/private-route";
 
 const SignInWrapped = withSignIn(SignIn);
 const FilmOverviewWrapped = withFilmOverview(FilmOverview);
@@ -24,18 +26,23 @@ export const withScreenSwitch = (Component) => {
     }
 
     render() {
-      const {id, isAuthorizationRequired} = this.props;
+      const {id, isAuthorizationRequired, getComments} = this.props;
       return <Switch>
         <Route path="/" exact render={() => <Component
           {...this.props}
           renderScreen={this._getScreen}
         />} />
+        <Route path="/films/:id/player" exact render={() => <VideoPlayer
+          {...this.props}
+          id = {id}
+        />} />
         <Route path="/login" component={SignInWrapped} />
-        <Route path="/films/:id/review" exact component={FilmAddReview} />
+        <Route path="/films/:id/addreview" exact component={FilmAddReview} />
         <Route path="/mylist" component={MyFilmList} />
         <Route path="/films/:id" render={() => <FilmOverviewWrapped
           {...this.props}
           id = {id}
+          comments={getComments(id)}
         />} />
         {/* <PrivateRoute path="/mylist" isAuth={isAuthorizationRequired} component={MyFilmList} /> */}
         <Route path="/log">
@@ -69,8 +76,16 @@ const mapStateToProps = (state) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getComments: (id) => {
+      dispatch(Operation.loadComments(id));
+    }
+  };
+};
+
 export default compose(
     withRouter,
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     withScreenSwitch
 );

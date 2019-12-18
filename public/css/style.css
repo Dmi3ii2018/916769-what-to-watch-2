@@ -971,6 +971,11 @@ main {
   text-align: center;
   cursor: pointer; }
 
+  .player__exit a {
+    color: #EEE5B5;
+    text-decoration: none;
+  }
+
 .player__controls {
   position: absolute;
   z-index: 2;

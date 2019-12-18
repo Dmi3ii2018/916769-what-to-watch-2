@@ -27,6 +27,11 @@ export const filterReducer = (state = initialState, action) => {
         promoFilm: action.payload,
       });
 
+    case `GET_COMMENTS`:
+      return Object.assign({}, state, {
+        comments: action.payload,
+      });
+
     default:
       return state;
   }

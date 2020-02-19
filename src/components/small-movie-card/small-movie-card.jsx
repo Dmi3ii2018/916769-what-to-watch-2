@@ -71,7 +71,6 @@ SmallMovieCard.propTypes = {
   isClicked: PropTypes.bool
 };
 
-
 const mapStateToProps = (state) => ({
   choosenFilm: state.filterReducer.choosenFilmId,
 });
@@ -83,3 +82,5 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SmallMovieCard));
+
+  
